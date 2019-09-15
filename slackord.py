@@ -8,10 +8,10 @@ discord_info = json.load('discord_info.json')
 SERVER_ID = discord_info['SERVER_ID']
 GUILD_NAME = discord_info['GUILD_NAME']
 TOKEN = discord_info['TOKEN']
+BACKUP_FOLDER_NAME = discord_info['BACKUP_FOLDER_NAME']
 
 current_folder = os.getcwd()
-backup_path = 'Vamp Lab Slack export Sep 9 2016 - Sep 7 2019'
-full_path_backup = pj(current_folder, backup_path)
+full_path_backup = pj(current_folder, BACKUP_FOLDER_NAME)
 slack_channels = os.listdir(full_path_backup)
 
 channel_name = 'shame_cube'

@@ -1,7 +1,8 @@
 [
   {
-    "SERVER_ID":  "",
-    "GUILD_NAME": "",
-    "TOKEN":      ""
+    "SERVER_ID":  "your_server_id_here",
+    "GUILD_NAME": "your_server_name_here",
+    "TOKEN":      "your_token_here",
+    "BACKUP_FOLDER_NAME":  "your_slack_backup_foldername_here"
   }
 ]
