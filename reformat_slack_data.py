@@ -184,8 +184,11 @@ async def convert_attachment_to_file(file_name, file_path, attachment):
     with open(file_path, 'wb') as fd:
         async for data in attachment.content.iter_chunked(1024):
             fd.write(data)
-    if file_name[-3:] == 'pdf':
-        file_path = renameFileToPDFTitle(os.path.split(file_path)[0], file_name)
+    # # TODO: Create a pdf-sorting module for academic articles so article's get posted with
+    # #  author's/journal name/pub date/Title/keywords.
+    # #  Also utilize new module for article scraping/aggregating.
+    # if file_name[-3:] == 'pdf':
+    #     file_path = renameFileToPDFTitle(os.path.split(file_path)[0], file_name)
     return file_path
 
 
