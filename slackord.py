@@ -1,14 +1,13 @@
-import datetime
 import json
+import logging
 import os
 from os.path import join as pj
+from pprint import pprint
 import discord
+
 import reformat_slack_data as get_slack
-from reformat_slack_data import fmt, GIPHY_BOT
-import logging
+
 logging.basicConfig(level=logging.INFO)
-
-
 
 current_folder = os.getcwd()
 discord_info_json = pj(current_folder, 'discord_info.json')
@@ -49,7 +48,7 @@ async def on_ready():
         # # Can only alter current user's settings.
         # if user_info['id'] is not None:
         #     discord_user = client.get_user(user_info['id'])
-            # await discord.ClientUser(discord_user).edit_settings(**settings)
+        # await discord.ClientUser(discord_user).edit_settings(**settings)
 
 
 @client.event
@@ -95,6 +94,7 @@ async def import_message(message, discord_users, slack_channel, discord_channel)
         for sub_slack_message in data:
             processed_message = await get_slack.process_message(sub_slack_message, discord_users, slack_channel)
             if processed_message != {}:
+                pprint(processed_message)
                 await discord_channel.send(**processed_message)
 
 
