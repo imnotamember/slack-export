@@ -12,6 +12,7 @@ from pdfrw import PdfReader
 import giphy_client
 from giphy_client.rest import ApiException
 from pprint import pprint
+from settings import EMBED_COLORS
 
 fmt = "%Y-%m-%d %H:%M:%S"
 GIPHY_API = giphy_client.DefaultApi()
@@ -427,8 +428,12 @@ async def extract_message_info(discord_users, type=None, user=None, ts=None, tex
     # Convert timestamp to `datetime` iso string
     timestamp = datetime.datetime.fromtimestamp(float(ts)).isoformat()
     user_info = discord_users[user]
+    # Handle bots
+    if bot_id is not None:
+        if bot_id == GIPHY_BOT:
+            pass  # TODO: set up to handle all types
     if 'subtype' in kwargs:
-        subtype = kwargs['subtype']
+        type = kwargs['subtype']
         # if 'channel_join' == subtype:  # "has joined" in text:
         #     text = user_info['slack_handle'] + text.split('>')[1]
         text_search = dict(
@@ -445,12 +450,21 @@ async def extract_message_info(discord_users, type=None, user=None, ts=None, tex
                     text_search[term] = ''
             else:
                 text_search[term] = phrase
-        text = MESSAGE_FORMATTING[subtype].format(slack_handle=text_search['slack_handle'],
+        text = MESSAGE_FORMATTING[type].format(slack_handle=text_search['slack_handle'],
                                                   post_slack_handle_text=text_search['post_slack_handle_text'],
                                                   set_purpose=text_search['set_purpose'],
                                                   purpose=text_search['purpose'],
                                                   text=text_search['text'])
     return type, user, user_info, timestamp, text, bot_id, files, attachments, kwargs
+
+
+async def message_prep(embed_info, file_info=None, type='DEFAULT'):
+    file = file_info
+    if file_info is not None:
+        file = discord.File(**file_info)
+    embed = discord.Embed.from_dict(dict(color=EMBED_COLORS[type], **message))
+    message = dict(embed=embed, file=file)
+    return message
 
 
 def get_giphy(token, gif_id):
